@@ -41,7 +41,7 @@ var FriscoBot = module.exports = function(config) {
         // if there are required words, filter tweets without them
         if (requiredWords && requiredWords.length) {
             if (!containsAnyOf(requiredWords, text)) {
-                console.log('required > ', tweet.text);
+                console.log('required (@' + tweet.user.screen_name + ') > ', tweet.text);
                 return;
             }
         }
@@ -49,7 +49,7 @@ var FriscoBot = module.exports = function(config) {
         // filter out tweets that could be sensitive
         var filteredWord = containsAnyOf(filterWords, text);
         if (filteredWord) {
-            console.log('filtered > ', filteredWord);
+            console.log('filtered (@' + tweet.user.screen_name + ') > ', filteredWord);
             return;
         }
 
