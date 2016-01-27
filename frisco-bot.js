@@ -38,6 +38,12 @@ var FriscoBot = module.exports = function(config) {
     stream.on('tweet', function(tweet) {
         var text = this.normalizeText(tweet.text);
 
+        // filter out tweets full of hashtags
+        if ((text.match(/#/g)||[]).length >= config.tooManyHashtags) {
+            console.log('hashtags (@' + tweet.user.screen_name + ') > ', tweet.text);
+            return;
+        }
+
         // if there are required words, filter tweets without them
         if (requiredWords && requiredWords.length) {
             if (!containsAnyOf(requiredWords, text)) {
@@ -71,7 +77,6 @@ var FriscoBot = module.exports = function(config) {
 
             if (config.reallyActuallyTweet) {
                 twit.post('statuses/update', { in_reply_to_status_id: tweet.id_str, status: response }, function(err, data, response) { 
-                // twit.post('statuses/update', { status: response }, function(err, data, response) {
                     if (err) {
                         console.log('Error:\n', err);
                     }

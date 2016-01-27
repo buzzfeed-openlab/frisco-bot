@@ -43,6 +43,8 @@
         "SanFrancisco"
     ],
 
+    "tooManyHashtags": 3,
+
     "responses": [
         "I think you mean \"Frisco\"...",
         "San Francisco? Do you mean Frisco?",
