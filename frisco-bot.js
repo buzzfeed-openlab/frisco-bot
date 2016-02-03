@@ -111,7 +111,7 @@ var FriscoBot = module.exports = function(config) {
         console.log('Error:\n', err);
     });
 
-    setInterval(this.autoUnfollow.bind(this, config, twit), 30000);
+    setInterval(this.autoUnfollow.bind(this, config, twit), 600000);
 };
 
 FriscoBot.prototype.autoUnfollow = function(config, twit) {
