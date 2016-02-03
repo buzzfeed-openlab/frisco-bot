@@ -83,11 +83,60 @@ var FriscoBot = module.exports = function(config) {
                 });
             }
         }
-        
+
     }.bind(this));
 
     stream.on('error', function(err) {
         console.log('Error:\n', err);
+    });
+
+    // set up user stream
+    var userStream = twit.stream('user');
+
+    userStream.on('follow', function(eventMsg) {
+        console.log('FOLLOWED BY @' + eventMsg.source.screen_name);
+
+        if (eventMsg.target.screen_name == config.twitterHandle) {
+            // someone followed us!
+            twit.post('friendships/create', { user_id: eventMsg.source.id_str, follow: true }, function(err, data, response) { 
+                if (err) {
+                    console.log('Error:\n', err);
+                }
+            });
+        }
+
+    }.bind(this));
+
+    userStream.on('error', function(err) {
+        console.log('Error:\n', err);
+    });
+
+    setInterval(this.autoUnfollow.bind(this, config, twit), 30000);
+};
+
+FriscoBot.prototype.autoUnfollow = function(config, twit) {
+    twit.get('followers/ids', { screen_name: config.twitterHandle, stringify_ids: true }, function (err, followers, response) {
+        if (err) {
+            return console.log('Error:\n', err);
+        }
+
+        twit.get('friends/ids', { screen_name: config.twitterHandle, stringify_ids: true }, function (err, following, response) {
+            if (err) {
+                return console.log('Error:\n', err);
+            }
+
+            // unfollow people who left
+            var toUnfollow = following.ids.filter(function(f) { return followers.ids.indexOf(f) < 0 });
+            console.log('UNFOLLOWING:', toUnfollow);
+
+            toUnfollow.forEach(function(f) {
+                twit.post('friendships/destroy', { user_id: f }, function(err, data, response) {
+                    if (err) {
+                        return console.log('Error:\n', err);
+                    }
+                });
+            });
+        });
     });
 };
 
