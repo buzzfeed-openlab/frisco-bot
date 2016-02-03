@@ -22,20 +22,11 @@ var FriscoBot = module.exports = function(config) {
     // trackWords but link to things that do
     requiredWords = requiredWords.concat(trackWords);
 
-    // set up twitter stream using filters
-    var twit = new Twit(twitterCreds),
-        filters = {};
+    // set up twitter stream
+    var twit = new Twit(twitterCreds);
+    var userStream = twit.stream('user');
 
-    if (trackWords.length) {
-        filters['track'] = trackWords;
-    }
-    if (config.locations && config.locations.length) {
-        filters['locations'] = config.locations;
-    }
-
-    var stream = twit.stream('statuses/filter', filters);
-
-    stream.on('tweet', function(tweet) {
+    userStream.on('tweet', function(tweet) {
         var text = this.normalizeText(tweet.text);
 
         // filter out tweets full of hashtags
@@ -85,13 +76,6 @@ var FriscoBot = module.exports = function(config) {
         }
 
     }.bind(this));
-
-    stream.on('error', function(err) {
-        console.log('Error:\n', err);
-    });
-
-    // set up user stream
-    var userStream = twit.stream('user');
 
     userStream.on('follow', function(eventMsg) {
         console.log('FOLLOWED BY @' + eventMsg.source.screen_name);

@@ -3,10 +3,11 @@
 
     "track": [],
 
-    "locations": ["-122.75", "36.8", "-121.75", "37.8"],
-
     "filterWords": [
         "frisco",
+        "attack",
+        "killed",
+        "killing",
         "fire",
         "crash",
         "emergency",
@@ -48,12 +49,12 @@
     "tooManyHashtags": 3,
 
     "responses": [
-        "I think you mean \"Frisco\"...",
+        "Save a few characters -- call it \"Frisco\"",
         "San Francisco? Do you mean Frisco?",
         "Did you mean to say \"Frisco\"?"
     ],
 
     "rateLimit": 30000,
 
-    "reallyActuallyTweet": false
+    "reallyActuallyTweet": true
 }
