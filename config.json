@@ -54,5 +54,5 @@
 
     "rateLimit": 30000,
 
-    "reallyActuallyTweet": true
+    "reallyActuallyTweet": false
 }
